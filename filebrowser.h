@@ -12,8 +12,6 @@ class FileBrowser
 {
     std::string workingDirectory;
     CalculationStrategy *strat;
-    Writer *writer;
-    bool IsOwnWriter;
 
 public:
     enum Strategy
@@ -22,10 +20,11 @@ public:
         ByType = 1
     };
 
-    FileBrowser(std::string directory = "NOT INITIALIZED", Strategy strategy = Strategy::EachFile, Writer *writer = nullptr);
+    FileBrowser(std::string directory = "NOT INITIALIZED", Strategy strategy = Strategy::EachFile);
     ~FileBrowser();
-    std::vector<std::pair<std::string, std::string>> CalculateStats();
 
+    std::vector<std::pair<std::string, std::string>> CalculateStats();
+    void SetStrat(Strategy newStrat);
 };
 
 #endif // FILEBROWSER_H

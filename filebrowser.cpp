@@ -1,41 +1,15 @@
 #include "filebrowser.h"
 
-FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy, Writer *writer)
+FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy)
 {
     workingDirectory = directory;
-    switch (strategy) {
-        case FileBrowser::Strategy::ByType:
-        {
-            strat = new Extention_CalculationStrategy();
-            break;
-        }
-        case FileBrowser::Strategy::EachFile:
-        {
-            strat = new EachElement_CalculationStrategy();
-            break;
-        }
-        default:
-        {
-            throw std::exception("Wrong strategy number!");
-        }
-    }
-
-    if(writer == nullptr)
-    {
-        this->writer = new ConsoleWriter();
-        IsOwnWriter = true;
-    }
-    else
-    {
-        IsOwnWriter = false;
-    }
+    strat = nullptr;
+    SetStrat(strategy);
 }
 
 FileBrowser::~FileBrowser()
 {
     delete strat;
-    if(IsOwnWriter)
-        delete writer;
 }
 
 std::vector<std::pair<std::string, std::string>> FileBrowser::CalculateStats()
@@ -55,5 +29,28 @@ std::vector<std::pair<std::string, std::string>> FileBrowser::CalculateStats()
     {
         QList<QFileInfo> list = qd.entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
         return strat->Calculate(list);
+    }
+}
+
+void FileBrowser::SetStrat(FileBrowser::Strategy newStrat)
+{
+    if(strat != nullptr)
+        delete strat;
+
+    switch (newStrat){
+        case FileBrowser::Strategy::ByType:
+        {
+            strat = new Extention_CalculationStrategy();
+            break;
+        }
+        case FileBrowser::Strategy::EachFile:
+        {
+            strat = new EachElement_CalculationStrategy();
+            break;
+        }
+        default:
+        {
+            throw std::exception("Wrong strategy number!");
+        }
     }
 }
