@@ -81,7 +81,7 @@ std::vector<std::pair<std::string, std::string> > Extention_CalculationStrategy:
         if(fileInfo.isFile())
         {
             qint64 size = fileInfo.size();
-            auto suffix = fileInfo.suffix().toStdString();
+            auto suffix = "*." + fileInfo.suffix().toStdString();
             if(rawResult.find(suffix) == rawResult.end())
             {
                 rawResult[suffix] = size;
@@ -98,7 +98,7 @@ std::vector<std::pair<std::string, std::string> > Extention_CalculationStrategy:
     {
         for(auto rawFile: rawResult)
         {
-            double procentSize =  100 / rawResult.size();
+            double procentSize =  100.0 / rawResult.size();
             std::string num_text = std::to_string(procentSize);
             std::string rounded = num_text.substr(0, num_text.find(".")+3);
             if(rounded == "0.00")
