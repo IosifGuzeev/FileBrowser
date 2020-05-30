@@ -17,7 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         calculationstrategy.cpp \
         filebrowser.cpp \
-        main.cpp
+        main.cpp \
+        writer.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -26,4 +27,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     calculationstrategy.h \
-    filebrowser.h
+    filebrowser.h \
+    writer.h

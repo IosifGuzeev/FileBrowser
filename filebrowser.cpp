@@ -1,6 +1,6 @@
 #include "filebrowser.h"
 
-FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy)
+FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy, Writer *writer)
 {
     workingDirectory = directory;
     switch (strategy) {
@@ -20,14 +20,25 @@ FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy)
         }
     }
 
+    if(writer == nullptr)
+    {
+        this->writer = new ConsoleWriter();
+        IsOwnWriter = true;
+    }
+    else
+    {
+        IsOwnWriter = false;
+    }
 }
 
 FileBrowser::~FileBrowser()
 {
     delete strat;
+    if(IsOwnWriter)
+        delete writer;
 }
 
-std::vector<std::pair<std::string, std::string>> FileBrowser::Calculate()
+std::vector<std::pair<std::string, std::string>> FileBrowser::CalculateStats()
 {
     QDir qd(workingDirectory.c_str());
 
