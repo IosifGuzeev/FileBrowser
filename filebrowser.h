@@ -9,16 +9,16 @@
 
 class FileBrowser
 {
+    std::string workingDirectory;
+    CalculationStrategy *strat;
+
+public:
     enum Strategy
     {
         EachFile = 0,
         ByType = 1
     };
 
-    std::string workingDirectory;
-    CalculationStrategy *strat;
-
-public:
     FileBrowser(std::string directory = "NOT INITIALIZED", Strategy strategy = Strategy::EachFile);
     ~FileBrowser();
     std::vector<std::pair<std::string, std::string>> Calculate();

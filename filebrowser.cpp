@@ -6,7 +6,7 @@ FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy)
     switch (strategy) {
         case FileBrowser::Strategy::ByType:
         {
-            strat = nullptr;
+            strat = new Extention_CalculationStrategy();
             break;
         }
         case FileBrowser::Strategy::EachFile:

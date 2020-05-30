@@ -2,6 +2,7 @@
 #define CALCULATIONSTRATEGY_H
 #pragma once
 #include <vector>
+#include <map>
 #include <string>
 #include <utility>
 #include <QDir>
