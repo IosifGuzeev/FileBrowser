@@ -22,9 +22,27 @@ FileBrowser::FileBrowser(std::string directory, FileBrowser::Strategy strategy)
 
 }
 
-std::vector<std::pair<std::string, std::string> > FileBrowser::Calculate()
+FileBrowser::~FileBrowser()
+{
+    delete strat;
+}
+
+std::vector<std::pair<std::string, std::string>> FileBrowser::Calculate()
 {
     QDir qd(workingDirectory.c_str());
-    QList<QFileInfo> list = qd.entryInfoList();
-    return strat->Calculate(list);
+
+    if(!qd.exists())
+        throw std::exception("Folder doesnt exists!");
+
+    if(qd.isEmpty())
+    {
+        std::vector<std::pair<std::string, std::string>> result;
+        result.push_back(std::make_pair("empty", "100%"));
+        return result;
+    }
+    else
+    {
+        QList<QFileInfo> list = qd.entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
+        return strat->Calculate(list);
+    }
 }
