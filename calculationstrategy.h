@@ -16,6 +16,9 @@ class CalculationStrategy
 
 class EachElement_CalculationStrategy: public CalculationStrategy
 {
+public:
+    qint64 folder_size(QString path);
+public:
     std::vector<std::pair<std::string, std::string>> Calculate(QList<QFileInfo> files) override;
     ~EachElement_CalculationStrategy() override {};
 };

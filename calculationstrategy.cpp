@@ -1,5 +1,19 @@
 #include "calculationstrategy.h"
 
+qint64 EachElement_CalculationStrategy::folder_size(QString path)
+{
+    QDir dir(path);
+    if(!dir.exists())
+        throw std::exception("Folder doesnt exists!");
+
+    qint64 size = 0;
+    for(auto& file: dir.entryInfoList(QDir::NoDotAndDotDot|QDir::Files))
+        size += file.size();
+    for(auto& folder: dir.entryInfoList(QDir::NoDotAndDotDot|QDir::Dirs))
+        size += folder_size(folder.absoluteFilePath());
+    return size;
+}
+
 std::vector<std::pair<std::string, std::string>> EachElement_CalculationStrategy::Calculate(QList<QFileInfo> files)
 {
     std::vector<std::pair<std::string, std::string>> result;
@@ -9,7 +23,11 @@ std::vector<std::pair<std::string, std::string>> EachElement_CalculationStrategy
 
     for(auto fileInfo: files)
     {
-        qint64 size = fileInfo.size();
+        qint64 size;
+        if(fileInfo.isFile())
+            size = fileInfo.size();
+        else
+            size = folder_size(fileInfo.absoluteFilePath());
         rawResult.push_back(std::make_pair(fileInfo.fileName().toStdString(), size));
         totalWeight += size;
     }
