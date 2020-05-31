@@ -54,3 +54,8 @@ void FileBrowser::SetStrat(FileBrowser::Strategy newStrat)
         }
     }
 }
+
+void FileBrowser::SetDirectory(std::string path)
+{
+    workingDirectory = path;
+}
