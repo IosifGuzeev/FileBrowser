@@ -25,6 +25,7 @@ public:
 
     std::vector<std::pair<std::string, std::string>> CalculateStats();
     void SetStrat(Strategy newStrat);
+    void SetDirectory(std::string path);
 };
 
 #endif // FILEBROWSER_H
