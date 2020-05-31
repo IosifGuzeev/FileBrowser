@@ -58,7 +58,7 @@ std::vector<std::pair<std::string, std::string>> EachElement_CalculationStrategy
             std::string rounded = num_text.substr(0, num_text.find(".")+3);
             if(rounded == "0.00")
             {
-                result.push_back(std::make_pair(rawFile.first, ">0.01%"));
+                result.push_back(std::make_pair(rawFile.first, "<0.01%"));
             }
             else
             {
@@ -120,7 +120,7 @@ std::vector<std::pair<std::string, std::string> > Extention_CalculationStrategy:
             std::string rounded = num_text.substr(0, num_text.find(".")+3);
             if(rounded == "0.00")
             {
-                result.push_back(std::make_pair(rawFile.first, ">0.01%"));
+                result.push_back(std::make_pair(rawFile.first, "<0.01%"));
             }
             else
             {
