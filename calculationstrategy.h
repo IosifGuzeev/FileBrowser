@@ -15,7 +15,7 @@ class CalculationStrategy
     /// \brief Calculate
     /// Метод сбора статистики.
     /// \param files
-    /// Список элементов обозреваемой директории
+    /// Список элементов обозреваемой директории.
     /// \return
     /// Вектор пар строк: Первая строка содержит имя элемента, вторая строка содержит статистику соответствующего элемента.
     ///
@@ -29,6 +29,13 @@ class CalculationStrategy
 class EachElement_CalculationStrategy: public CalculationStrategy
 {
 public:
+    ///
+    /// \brief folder_size
+    ///  Рекурсивно вычисляет размер заданной директории.
+    /// \param path
+    ///  Абсолютный путь до директории.
+    /// \return
+    /// Размер заданной директории.
     qint64 folder_size(QString path);
 public:
     std::vector<std::pair<std::string, std::string>> Calculate(QList<QFileInfo> files) override;
