@@ -5,6 +5,11 @@
 #include <string>
 #include <iostream>
 
+
+///
+/// \brief The Writer class
+/// Абстрактный класс отвечающий за вывод сообщений путем вызова метода Write.
+///
 class Writer
 {
 public:
@@ -12,6 +17,10 @@ public:
     virtual void Write(std::string message) = 0;
 };
 
+
+///
+/// \brief The ConsoleWriter class
+/// Реализация класса Write, отвечающая за вывод сообщения на консоль.
 class ConsoleWriter: public Writer
 {
 public:
