@@ -1,7 +1,10 @@
 #include "calculationstrategy.h"
 
-qint64 EachElement_CalculationStrategy::folder_size(QString path)
+qint64 EachElement_CalculationStrategy::folder_size(QString path, int maxDeep, int deep)
 {
+    if(deep > maxDeep)
+        return 0;
+
     QDir dir(path);
     if(!dir.exists())
         throw std::exception("Folder doesnt exists!");
@@ -10,7 +13,7 @@ qint64 EachElement_CalculationStrategy::folder_size(QString path)
     for(auto& file: dir.entryInfoList(QDir::NoDotAndDotDot|QDir::Files))
         size += file.size();
     for(auto& folder: dir.entryInfoList(QDir::NoDotAndDotDot|QDir::Dirs))
-        size += folder_size(folder.absoluteFilePath());
+        size += folder_size(folder.absoluteFilePath(), maxDeep, deep + 1);
     return size;
 }
 

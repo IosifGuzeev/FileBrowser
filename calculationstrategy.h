@@ -7,6 +7,7 @@
 #include <utility>
 #include <QDir>
 
+#define DEEP_THRESHOLD 1
 
 class CalculationStrategy
 {
@@ -18,7 +19,7 @@ class CalculationStrategy
 class EachElement_CalculationStrategy: public CalculationStrategy
 {
 public:
-    qint64 folder_size(QString path);
+    qint64 folder_size(QString path, int maxDeep = DEEP_THRESHOLD, int deep = 0);
 public:
     std::vector<std::pair<std::string, std::string>> Calculate(QList<QFileInfo> files) override;
     ~EachElement_CalculationStrategy() override {};
