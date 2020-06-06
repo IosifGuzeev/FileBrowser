@@ -11,6 +11,7 @@
 #include <QStatusBar>
 #include <QDebug>
 
+
 MainWindow::MainWindow(QWidget *parent)
 	: //QWidget(parent)
 	  QMainWindow(parent)
@@ -21,14 +22,15 @@ MainWindow::MainWindow(QWidget *parent)
 	this->statusBar()->showMessage("Choosen Path: ");
 	QString homePath = QDir::homePath();
 	// Определим  файловой системы:
-	dirModel =  new QFileSystemModel(this);
+    dirModel =  new QFileSystemModel(this);
 	dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
 	dirModel->setRootPath(homePath);
 
-	fileModel = new QFileSystemModel(this);
-	fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    fileBrowser = new FileBrowser(homePath.toStdString());
+    std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    fileModel = new FileExplorerModel(data, this);
 
-	fileModel->setRootPath(homePath);
+
 	//Показать как дерево, пользуясь готовым видом:
 
 	treeView = new QTreeView();
@@ -37,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
 	treeView->expandAll();
 	QSplitter *splitter = new QSplitter(parent);
 	tableView = new QTableView;
-	tableView->setModel(fileModel);
+    tableView->setModel(fileModel);
 	splitter->addWidget(treeView);
 	splitter->addWidget(tableView);
 	setCentralWidget(splitter);
@@ -129,7 +131,9 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
 	}
 
 	treeView->header()->resizeSection(index.column(), length + dirModel->fileName(index).length());
-	tableView->setRootIndex(fileModel->setRootPath(filePath));
+    //fileBrowser->SetDirectory(filePath.toStdString());
+    //std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    //tableView->setModel(new FileExplorerModel(data));
 }
 
 MainWindow::~MainWindow()

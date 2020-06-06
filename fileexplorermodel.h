@@ -11,7 +11,7 @@ class FileExplorerModel final : public QAbstractTableModel
 
 public:
     using fileStat = std::pair<std::string, std::string>;
-    FileExplorerModel(std::vector<fileStat> data, QObject* parent = nullptr);
+    FileExplorerModel(std::vector<fileStat> data = std::vector<fileStat>(), QObject* parent = nullptr);
 
 private:
     std::vector<fileStat> filesStat;
