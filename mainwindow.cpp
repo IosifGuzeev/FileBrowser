@@ -131,9 +131,9 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
 	}
 
 	treeView->header()->resizeSection(index.column(), length + dirModel->fileName(index).length());
-    //fileBrowser->SetDirectory(filePath.toStdString());
-    //std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
-    //tableView->setModel(new FileExplorerModel(data));
+    fileBrowser->SetDirectory(filePath.toStdString());
+    std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    tableView->setModel(new FileExplorerModel(data));
 }
 
 MainWindow::~MainWindow()

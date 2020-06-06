@@ -25,11 +25,11 @@ QVariant FileExplorerModel::data(const QModelIndex& index, int role) const
     switch (index.column())
     {
         case 0:
-            return filesStat[index.column()].first.c_str();
+            return filesStat[index.row()].first.c_str();
 
         case 1:
         {
-            return filesStat[index.column()].second.c_str();
+            return filesStat[index.row()].second.c_str();
         }
         default:
             QVariant();
