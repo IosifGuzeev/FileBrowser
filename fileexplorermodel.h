@@ -1,11 +1,23 @@
 #ifndef FILEEXPLORERMODEL_H
 #define FILEEXPLORERMODEL_H
-#include <QFileSystemModel>
+#pragma once
+#include <utility>
+#include <vector>
+#include <QAbstractTableModel>
 
-class FileExplorerModel: public QFileSystemModel
+class FileExplorerModel final : public QAbstractTableModel
 {
-public:
-	FileExplorerModel(QObject *parent = nullptr);
-};
+    Q_OBJECT
 
+public:
+    using fileStat = std::pair<std::string, std::string>;
+    FileExplorerModel(std::vector<fileStat> data, QObject* parent = nullptr);
+
+private:
+    std::vector<fileStat> filesStat;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+};
 #endif // FILEEXPLORERMODEL_H
