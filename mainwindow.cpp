@@ -10,14 +10,14 @@
 #include <QHeaderView>
 #include <QStatusBar>
 #include <QDebug>
-
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
 	: //QWidget(parent)
 	  QMainWindow(parent)
 {
 	//Устанавливаем размер главного окна
-	this->setGeometry(100, 100, 1500, 500);
+    this->setGeometry(100, 100, 800, 600);
 	this->setStatusBar(new QStatusBar(this));
 	this->statusBar()->showMessage("Choosen Path: ");
 	QString homePath = QDir::homePath();
@@ -37,12 +37,12 @@ MainWindow::MainWindow(QWidget *parent)
 	treeView->setModel(dirModel);
 
 	treeView->expandAll();
-	QSplitter *splitter = new QSplitter(parent);
+    QSplitter *viewSplitter = new QSplitter(parent);
 	tableView = new QTableView;
     tableView->setModel(fileModel);
-	splitter->addWidget(treeView);
-	splitter->addWidget(tableView);
-	setCentralWidget(splitter);
+    viewSplitter->addWidget(treeView);
+    viewSplitter->addWidget(tableView);
+    setCentralWidget(viewSplitter);
 
 	QItemSelectionModel *selectionModel = treeView->selectionModel();
 	QModelIndex rootIx = dirModel->index(0, 0, QModelIndex());//корневой элемент
@@ -95,6 +95,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 	toggleSelection.select(topLeft, topLeft);
 	selectionModel->select(toggleSelection, QItemSelectionModel::Toggle);
+
+
+    auto comboBox = new QComboBox(parent);
+    comboBox->addItem("By type");
+    comboBox->addItem("By extention");
+    auto horizonSplitter = new QSplitter(Qt::Orientation::Horizontal, parent);
+    horizonSplitter->addWidget(comboBox);
+    setMenuWidget(horizonSplitter);
 }
 //Слот для обработки выбора элемента в TreeView
 //выбор осуществляется с помощью курсора
