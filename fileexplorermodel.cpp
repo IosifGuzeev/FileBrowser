@@ -55,6 +55,4 @@ QVariant FileExplorerModel::headerData(int section, Qt::Orientation orientation,
     default:
         return QVariant();
     }
-    return QVariant();
-
 }
