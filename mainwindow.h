@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
 private slots:
 
 	void on_selectionChangedSlot(const QItemSelection &selected, const QItemSelection &deselected);
-
+    void on_stratSelectionSlot(QString msg);
 public:
 	MainWindow(QWidget *parent = 0);
 	~MainWindow();
@@ -25,6 +25,7 @@ private:
 	QFileSystemModel *dirModel;
 	QTreeView *treeView;
 	QTableView *tableView;
+    QString curentDirectory;
 };
 
 #endif // MAINWINDOW_H

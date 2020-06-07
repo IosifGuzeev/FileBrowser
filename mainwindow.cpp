@@ -17,10 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
 	  QMainWindow(parent)
 {
 	//Устанавливаем размер главного окна
-    this->setGeometry(100, 100, 800, 600);
+    this->setGeometry(100, 100, 1500, 600);
 	this->setStatusBar(new QStatusBar(this));
 	this->statusBar()->showMessage("Choosen Path: ");
 	QString homePath = QDir::homePath();
+    curentDirectory = homePath;
 	// Определим  файловой системы:
     dirModel =  new QFileSystemModel(this);
 	dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
@@ -98,18 +99,19 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     auto comboBox = new QComboBox(parent);
-    comboBox->addItem("By type");
+    comboBox->addItem("Each file");
     comboBox->addItem("By extention");
     auto horizonSplitter = new QSplitter(Qt::Orientation::Horizontal, parent);
     horizonSplitter->addWidget(comboBox);
     setMenuWidget(horizonSplitter);
+    connect(comboBox, SIGNAL(currentTextChanged(QString)),
+            this, SLOT(on_stratSelectionSlot(QString)));
 }
 //Слот для обработки выбора элемента в TreeView
 //выбор осуществляется с помощью курсора
 
 void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const QItemSelection &deselected)
 {
-	//Q_UNUSED(selected);
 	Q_UNUSED(deselected);
 	QModelIndex index = treeView->selectionModel()->currentIndex();
 	QModelIndexList indexs =  selected.indexes();
@@ -121,29 +123,27 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
 		QModelIndex ix =  indexs.constFirst();
 		filePath = dirModel->filePath(ix);
 		this->statusBar()->showMessage("Выбранный путь : " + dirModel->filePath(indexs.constFirst()));
-	}
-
-	//TODO: !!!!!
-	/*
-	Тут простейшая обработка ширины первого столбца относительно длины названия папки.
-	Это для удобства, что бы при выборе папки имя полностью отображалась в  первом столбце.
-	Требуется доработка(переработка).
-	*/
-	int length = 200;
-	int dx = 30;
-
-	if (dirModel->fileName(index).length() * dx > length) {
-		length = length + dirModel->fileName(index).length() * dx;
-		qDebug() << "r = " << index.row() << "c = " << index.column() << dirModel->fileName(index) << dirModel->fileInfo(
-					 index).size();
-
-	}
-
-	treeView->header()->resizeSection(index.column(), length + dirModel->fileName(index).length());
+    }
+    curentDirectory = filePath;
     fileBrowser->SetDirectory(filePath.toStdString());
     std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
     tableView->setModel(new FileExplorerModel(data));
 }
+
+void MainWindow::on_stratSelectionSlot(QString msg)
+{
+    qDebug() << msg;
+    if(msg == "By extention")
+        fileBrowser->SetStrat(FileBrowser::Strategy::ByType);
+    else if(msg == "Each file")
+        fileBrowser->SetStrat(FileBrowser::Strategy::EachFile);
+    else
+        throw std::exception("This option not impelmented yet!");
+    fileBrowser->SetDirectory(curentDirectory.toStdString());
+    std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    tableView->setModel(new FileExplorerModel(data));
+}
+
 
 MainWindow::~MainWindow()
 {
