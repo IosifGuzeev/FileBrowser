@@ -50,39 +50,40 @@ MainWindow::MainWindow(QWidget *parent)
 	QModelIndex indexHomePath = dirModel->index(homePath);
 	QFileInfo fileInfo = dirModel->fileInfo(indexHomePath);
 
-	/* Рассмотрим способы обхода содержимого папок на диске.
-	 * Предлагается вариант решения, которы может быть применен для более сложных задач.
-	 * Итак, если требуется выполнить анализ содержимого папки, то необходимо организовать обход содержимого. Обход выполняем относительно модельного индекса.
-	 * Например:*/
-	if (fileInfo.isDir()) {
-		/*
-		 * Если fileInfo папка то заходим в нее, что бы просмотреть находящиеся в ней файлы.
-		 * Если нужно просмотреть все файлы, включая все вложенные папки, то нужно организовать рекурсивный обход.
-		*/
-		QDir dir  = fileInfo.dir();
+    /* Рассмотрим способы обхода содержимого папок на диске.
+     * Предлагается вариант решения, которы может быть применен для более сложных задач.
+     * Итак, если требуется выполнить анализ содержимого папки, то необходимо организовать обход содержимого. Обход выполняем относительно модельного индекса.
+     * Например:*/
+    if (fileInfo.isDir()) {
+        /*
+         * Если fileInfo папка то заходим в нее, что бы просмотреть находящиеся в ней файлы.
+         * Если нужно просмотреть все файлы, включая все вложенные папки, то нужно организовать рекурсивный обход.
+        */
+        QDir dir  = fileInfo.dir();
 
-		if (dir.cd(fileInfo.fileName())) {
-			/**
-			 * Если зашли в папку, то пройдемся по контейнеру QFileInfoList ,полученного методом entryInfoList,
-			 * */
+        if (dir.cd(fileInfo.fileName())) {
+            /**
+             * Если зашли в папку, то пройдемся по контейнеру QFileInfoList ,полученного методом entryInfoList,
+             * */
 
-			foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::Type)) {
-				qDebug() << inf.fileName() << "---" << inf.size();
-			}
+            foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::Type)) {
+                qDebug() << inf.fileName() << "---" << inf.size();
+            }
 
-			dir.cdUp();//выходим из папки
-		}
-	}
+            dir.cdUp();//выходим из папки
+        }
+    }
 
-	QDir dir = fileInfo.dir();
+    QDir dir = fileInfo.dir();
 
-	foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Type)) {
+    foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Type)) {
 
-		qDebug() << inf.fileName() << "---" << inf.size();
-	}
+        qDebug() << inf.fileName() << "---" << inf.size();
+    }
 
 
-	treeView->header()->resizeSection(0, 200);
+    treeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	//Выполняем соединения слота и сигнала который вызывается когда осуществляется выбор элемента в TreeView
 	connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
 			this, SLOT(on_selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
