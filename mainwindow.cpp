@@ -27,19 +27,18 @@ MainWindow::MainWindow(QWidget *parent)
 	dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
 	dirModel->setRootPath(homePath);
 
+    //Объект собирающий статистику об обозреваемой директории
     fileBrowser = new FileBrowser(homePath.toStdString());
-    std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
-    fileModel = new FileExplorerModel(data, this);
 
-
+    QSplitter *viewSplitter = new QSplitter(parent);
 	//Показать как дерево, пользуясь готовым видом:
-
 	treeView = new QTreeView();
 	treeView->setModel(dirModel);
-
 	treeView->expandAll();
-    QSplitter *viewSplitter = new QSplitter(parent);
+
 	tableView = new QTableView;
+    //Наша новая модель
+    fileModel = new FileExplorerModel(fileBrowser->CalculateStats(), this);
     tableView->setModel(fileModel);
     viewSplitter->addWidget(treeView);
     viewSplitter->addWidget(tableView);
@@ -50,38 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QModelIndex indexHomePath = dirModel->index(homePath);
 	QFileInfo fileInfo = dirModel->fileInfo(indexHomePath);
-
-    /* Рассмотрим способы обхода содержимого папок на диске.
-     * Предлагается вариант решения, которы может быть применен для более сложных задач.
-     * Итак, если требуется выполнить анализ содержимого папки, то необходимо организовать обход содержимого. Обход выполняем относительно модельного индекса.
-     * Например:*/
-    if (fileInfo.isDir()) {
-        /*
-         * Если fileInfo папка то заходим в нее, что бы просмотреть находящиеся в ней файлы.
-         * Если нужно просмотреть все файлы, включая все вложенные папки, то нужно организовать рекурсивный обход.
-        */
-        QDir dir  = fileInfo.dir();
-
-        if (dir.cd(fileInfo.fileName())) {
-            /**
-             * Если зашли в папку, то пройдемся по контейнеру QFileInfoList ,полученного методом entryInfoList,
-             * */
-
-            foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::Type)) {
-                qDebug() << inf.fileName() << "---" << inf.size();
-            }
-
-            dir.cdUp();//выходим из папки
-        }
-    }
-
-    QDir dir = fileInfo.dir();
-
-    foreach (QFileInfo inf, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Type)) {
-
-        qDebug() << inf.fileName() << "---" << inf.size();
-    }
-
 
     treeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -97,16 +64,19 @@ MainWindow::MainWindow(QWidget *parent)
 	toggleSelection.select(topLeft, topLeft);
 	selectionModel->select(toggleSelection, QItemSelectionModel::Toggle);
 
-
+    //Добавлем ComboBox для выбора стратегии отображения
     auto comboBox = new QComboBox(parent);
     comboBox->addItem("Each file");
     comboBox->addItem("By extention");
+    //Splitter будет удобен при добавлении дополнительных виджетов в область menu
     auto horizonSplitter = new QSplitter(Qt::Orientation::Horizontal, parent);
     horizonSplitter->addWidget(comboBox);
     setMenuWidget(horizonSplitter);
+    //Соединяем сигнал об изменении ComboBox с новым сигналом обработки
     connect(comboBox, SIGNAL(currentTextChanged(QString)),
             this, SLOT(on_stratSelectionSlot(QString)));
 }
+
 //Слот для обработки выбора элемента в TreeView
 //выбор осуществляется с помощью курсора
 
@@ -132,13 +102,14 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
 
 void MainWindow::on_stratSelectionSlot(QString msg)
 {
-    qDebug() << msg;
+    //Меняем стратегию в зависимости от выбранного параметра в ComboBox
     if(msg == "By extention")
         fileBrowser->SetStrat(FileBrowser::Strategy::ByType);
     else if(msg == "Each file")
         fileBrowser->SetStrat(FileBrowser::Strategy::EachFile);
     else
         throw std::exception("This option not impelmented yet!");
+    //Обновляем отображение
     fileBrowser->SetDirectory(curentDirectory.toStdString());
     std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
     tableView->setModel(new FileExplorerModel(data));
