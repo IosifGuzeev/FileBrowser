@@ -34,7 +34,10 @@ std::vector<std::pair<std::string, std::string>> EachElement_CalculationStrategy
         rawResult.push_back(std::make_pair(fileInfo.fileName().toStdString(), size));
         totalWeight += size;
     }
-
+    if (rawResult.size() == 0)
+    {
+        result.push_back(std::make_pair("empty", "100%"));
+    }
     if(totalWeight == 0)
     {
         for(auto rawFile: rawResult)
@@ -96,7 +99,10 @@ std::vector<std::pair<std::string, std::string> > Extention_CalculationStrategy:
             totalWeight += size;
         }
     }
-
+    if (rawResult.size() == 0)
+    {
+        result.push_back(std::make_pair("empty", "100%"));
+    }
     if(totalWeight == 0)
     {
         for(auto rawFile: rawResult)
