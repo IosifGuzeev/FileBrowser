@@ -3,6 +3,13 @@
 #include <iostream>
 #include <filebrowser.h>
 #include "mainwindow.h"
+#include <QChart>
+#include <QFileInfo>
+#include <QBarSeries>
+#include <QBarSet>
+#include <QPieSeries>
+#include <QPieSlice>
+#include <QStackedBarSeries>
 
 int main(int argc, char *argv[])
 {

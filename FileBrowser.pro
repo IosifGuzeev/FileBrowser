@@ -3,7 +3,7 @@ CONFIG += c++11 console
 CONFIG -= app_bundle
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QT += charts
 TARGET = LastCase
 TEMPLATE = app
 # The following define makes your compiler emit warnings if you use
@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         calculationstrategy.cpp \
+        chartadapter.cpp \
         filebrowser.cpp \
         fileexplorermodel.cpp \
         main.cpp \
@@ -32,6 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     calculationstrategy.h \
+    chartadapter.h \
     filebrowser.h \
     fileexplorermodel.h \
     mainwindow.h \
