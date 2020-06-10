@@ -89,6 +89,8 @@ MainWindow::MainWindow(QWidget *parent)
     //Соединяем сигнал об изменении ComboBox с новым сигналом обработки
     connect(statType, SIGNAL(currentTextChanged(QString)),
             this, SLOT(on_stratSelectionSlot(QString)));
+    connect(chartType, SIGNAL(currentTextChanged(QString)),
+            this, SLOT(on_chartSelectionSlot(QString)));
 }
 
 //Слот для обработки выбора элемента в TreeView
@@ -128,6 +130,23 @@ void MainWindow::on_stratSelectionSlot(QString msg)
     fileBrowser->SetDirectory(curentDirectory.toStdString());
     std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
     tableView->setModel(new FileExplorerModel(data));
+    chartView->setChart(chartAdapter->MakeChart(data));
+}
+
+void MainWindow::on_chartSelectionSlot(QString msg)
+{
+    delete chartAdapter;
+    //Меняем чарт в зависимости от выбранного параметра в ComboBox
+    if(msg == "Bar chart")
+        chartAdapter = new BarChartAdapter();
+    else if(msg == "Pie chart")
+        chartAdapter = new PieChartAdapter();
+    else
+        throw std::exception("This option not impelmented yet!");
+    //Обновляем отображение
+    fileBrowser->SetDirectory(curentDirectory.toStdString());
+    std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    chartView->setChart(chartAdapter->MakeChart(data));
 }
 
 
