@@ -16,7 +16,7 @@ public:
 };
 
 //Адаптер столбчатого чарта
-class BarChartAdapter : ChartAdapter
+class BarChartAdapter : public ChartAdapter
 {
     // ChartAdapter interface
 public:
