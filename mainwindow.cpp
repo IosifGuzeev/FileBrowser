@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QComboBox>
 
+
 MainWindow::MainWindow(QWidget *parent)
 	: //QWidget(parent)
 	  QMainWindow(parent)
@@ -40,8 +41,13 @@ MainWindow::MainWindow(QWidget *parent)
     //Наша новая модель
     fileModel = new FileExplorerModel(fileBrowser->CalculateStats(), this);
     tableView->setModel(fileModel);
+
+    chartView = new QChartView();
+    chartAdapter = new BarChartAdapter();
+    chartView->setChart(chartAdapter->MakeChart(fileBrowser->CalculateStats()));
     viewSplitter->addWidget(treeView);
     viewSplitter->addWidget(tableView);
+    viewSplitter->addWidget(chartView);
     setCentralWidget(viewSplitter);
 
 	QItemSelectionModel *selectionModel = treeView->selectionModel();
@@ -98,6 +104,7 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
     fileBrowser->SetDirectory(filePath.toStdString());
     std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
     tableView->setModel(new FileExplorerModel(data));
+    chartView->setChart(chartAdapter->MakeChart(data));
 }
 
 void MainWindow::on_stratSelectionSlot(QString msg)

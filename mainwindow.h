@@ -6,6 +6,9 @@
 #include <QFileSystemModel>
 #include <QTreeView>
 #include <QTableView>
+#include <QChart>
+#include <QChartView>
+#include "chartadapter.h"
 #include "fileexplorermodel.h"
 #include "filebrowser.h"
 
@@ -27,6 +30,8 @@ private:
 	QTreeView *treeView;
 	QTableView *tableView;
     QString curentDirectory;
+    ChartAdapter *chartAdapter;
+    QChartView * chartView;
 };
 
 #endif // MAINWINDOW_H
