@@ -71,15 +71,23 @@ MainWindow::MainWindow(QWidget *parent)
 	selectionModel->select(toggleSelection, QItemSelectionModel::Toggle);
 
     //Добавлем ComboBox для выбора стратегии отображения
-    auto comboBox = new QComboBox(parent);
-    comboBox->addItem("Each file");
-    comboBox->addItem("By extention");
+    auto statType = new QComboBox(parent);
+    statType->addItem("Each file");
+    statType->addItem("By extention");
+
+    //Добавляем ComboBox для выбора типа чарта
+    auto chartType = new QComboBox(parent);
+    chartType->addItem("Bar chart");
+    chartType->addItem("Pie chart");
+
     //Splitter будет удобен при добавлении дополнительных виджетов в область menu
     auto horizonSplitter = new QSplitter(Qt::Orientation::Horizontal, parent);
-    horizonSplitter->addWidget(comboBox);
+    horizonSplitter->addWidget(statType);
+    horizonSplitter->addWidget(chartType);
     setMenuWidget(horizonSplitter);
+
     //Соединяем сигнал об изменении ComboBox с новым сигналом обработки
-    connect(comboBox, SIGNAL(currentTextChanged(QString)),
+    connect(statType, SIGNAL(currentTextChanged(QString)),
             this, SLOT(on_stratSelectionSlot(QString)));
 }
 
