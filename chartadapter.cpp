@@ -17,7 +17,6 @@ QChart *BarChartAdapter::MakeChart(std::vector<std::pair<std::string, std::strin
             auto raw_statistic = e.second;
             raw_statistic.pop_back();
             auto statistic = QString(raw_statistic.c_str()).toDouble();
-            qDebug() << statistic;
             if(statistic > 0.05)
             {
 
@@ -36,5 +35,6 @@ QChart *BarChartAdapter::MakeChart(std::vector<std::pair<std::string, std::strin
     }
     result->addSeries(bars);
     result->setTitle("Визуализация данных об обозреваемой директории:");
+    result->legend()->setAlignment(Qt::AlignLeft);
     return result;
 }
