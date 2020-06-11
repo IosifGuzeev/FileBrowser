@@ -26,8 +26,6 @@ public:
 //Адаптер кругового чарта
 class PieChartAdapter : public ChartAdapter
 {
-
-
     // ChartAdapter interface
 public:
     QChart *MakeChart(std::vector<std::pair<std::string, std::string> > data) override;

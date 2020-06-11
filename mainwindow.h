@@ -18,8 +18,9 @@ class MainWindow : public QMainWindow
 private slots:
 
 	void on_selectionChangedSlot(const QItemSelection &selected, const QItemSelection &deselected);
-    //Новый сигнал, отвечает за обработку изменения в ComboBox
+    //Новый сигнал, отвечает за обработку изменения стратегии сбора статистики
     void on_stratSelectionSlot(QString msg);
+    //Новый сигнал, отвечает за обработку изменение формата отображаемого чарта
     void on_chartSelectionSlot(QString msg);
 public:
 	MainWindow(QWidget *parent = 0);

@@ -87,8 +87,10 @@ MainWindow::MainWindow(QWidget *parent)
     setMenuWidget(horizonSplitter);
 
     //Соединяем сигнал об изменении ComboBox с новым сигналом обработки
+    //Сигнал об измении стратегии сбора статистики
     connect(statType, SIGNAL(currentTextChanged(QString)),
             this, SLOT(on_stratSelectionSlot(QString)));
+    //Сигнал об изменении вида графика
     connect(chartType, SIGNAL(currentTextChanged(QString)),
             this, SLOT(on_chartSelectionSlot(QString)));
 }
