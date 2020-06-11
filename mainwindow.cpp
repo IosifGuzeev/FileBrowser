@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 	this->setStatusBar(new QStatusBar(this));
 	this->statusBar()->showMessage("Choosen Path: ");
 	QString homePath = QDir::homePath();
+    //Сохраняем путь текущей директории
     curentDirectory = homePath;
 	// Определим  файловой системы:
     dirModel =  new QFileSystemModel(this);
@@ -94,9 +95,13 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
 		filePath = dirModel->filePath(ix);
 		this->statusBar()->showMessage("Выбранный путь : " + dirModel->filePath(indexs.constFirst()));
     }
+    //Обновляем путь текущей директкории
     curentDirectory = filePath;
+    //Обновляем директорию в объектке обозревателя
     fileBrowser->SetDirectory(filePath.toStdString());
+    //Получаем статистику
     std::vector<FileExplorerModel::fileStat> data = fileBrowser->CalculateStats();
+    //Обновляем модель
     tableView->setModel(new FileExplorerModel(data));
 }
 
