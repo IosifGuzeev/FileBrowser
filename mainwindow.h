@@ -32,7 +32,9 @@ private:
 	QTreeView *treeView;
 	QTableView *tableView;
     QString curentDirectory;
+    //Адаптер, порождает чарты на основании полученных данных
     ChartAdapter *chartAdapter;
+    //Виджет, отображающий чарты
     QChartView * chartView;
 };
 
