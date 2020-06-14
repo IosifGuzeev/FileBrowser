@@ -26,13 +26,14 @@ std::vector<std::pair<std::string, std::string>> EachElement_CalculationStrategy
 
     for(auto fileInfo: files)
     {
-        qint64 size;
-        if(fileInfo.isFile())
-            size = fileInfo.size();
-        else
+        if(fileInfo.isDir())
+        {
+            qint64 size;
+
             size = folder_size(fileInfo.absoluteFilePath());
-        rawResult.push_back(std::make_pair(fileInfo.fileName().toStdString(), size));
-        totalWeight += size;
+            rawResult.push_back(std::make_pair(fileInfo.fileName().toStdString(), size));
+            totalWeight += size;
+        }
     }
     if (rawResult.size() == 0)
     {
